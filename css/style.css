@@ -1,21 +1,22 @@
-/* ===== SceneForge 基础样式 ===== */
+/* ===== SceneForge 样式 v3 - 增加场景管理样式 ===== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
     --bg-primary: #1a1a2e;
     --bg-secondary: #16213e;
     --bg-surface: #0f3460;
+    --bg-card: #1e2d50;
     --text-primary: #e0e0e0;
     --text-secondary: #a0a0b8;
+    --text-muted: #6a6a88;
     --accent: #e94560;
     --accent-hover: #ff6b81;
+    --accent-alt: #0f9b8e;
     --border: #2a2a4a;
     --success: #4caf50;
+    --warning: #ff9800;
+    --panel-width: 340px;
 }
 
 body {
@@ -38,40 +39,22 @@ body {
     flex-shrink: 0;
 }
 
-.app-logo {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 1px;
-}
+.app-logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+.app-subtitle { font-size: 0.85rem; color: var(--text-secondary); }
 
-.app-subtitle {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
+/* ===== 主体布局 ===== */
+.app-body { flex: 1; display: flex; overflow: hidden; }
 
-/* ===== 主体 ===== */
 .app-main {
     flex: 1;
     padding: 24px;
-    max-width: 900px;
-    width: 100%;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
-.editor-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* ===== 标题输入 ===== */
-.title-area {
-    flex-shrink: 0;
-}
+.editor-section { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.title-area { flex-shrink: 0; }
 
 .title-input {
     width: 100%;
@@ -86,22 +69,10 @@ body {
     transition: border-color 0.2s;
     font-family: inherit;
 }
+.title-input::placeholder { color: var(--text-secondary); font-weight: 400; font-size: 1.1rem; }
+.title-input:focus { border-color: var(--accent); }
 
-.title-input::placeholder {
-    color: var(--text-secondary);
-    font-weight: 400;
-    font-size: 1.1rem;
-}
-
-.title-input:focus {
-    border-color: var(--accent);
-}
-
-/* ===== 内容编辑器 ===== */
-.content-area {
-    flex: 1;
-    display: flex;
-}
+.content-area { flex: 1; display: flex; }
 
 .content-editor {
     flex: 1;
@@ -118,15 +89,191 @@ body {
     font-family: 'Courier New', 'Source Code Pro', 'Microsoft YaHei', monospace;
     min-height: 400px;
 }
+.content-editor::placeholder { color: var(--text-secondary); font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+.content-editor:focus { border-color: var(--accent); }
 
-.content-editor::placeholder {
+/* ===== 右侧功能面板 ===== */
+.side-panel {
+    width: var(--panel-width);
+    background-color: var(--bg-secondary);
+    border-left: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.panel-tabs { display: flex; border-bottom: 1px solid var(--border); }
+
+.panel-tab {
+    flex: 1;
+    padding: 10px 4px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
     color: var(--text-secondary);
-    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.2s;
 }
+.panel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.panel-tab:not([disabled]):hover { color: var(--text-primary); }
+.panel-tab[disabled] { opacity: 0.4; cursor: not-allowed; }
 
-.content-editor:focus {
-    border-color: var(--accent);
+.panel-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+.panel-page { display: none; }
+.panel-page.active { display: block; }
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
+.panel-header h3 { font-size: 1rem; font-weight: 600; }
+
+/* ===== 通用表单 ===== */
+.card-form {
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+.card-form.hidden { display: none; }
+
+.form-input {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 60px; }
+.form-select { cursor: pointer; }
+
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ===== Checkbox 列表（场景角色选择） ===== */
+.checkbox-group {
+    margin-bottom: 8px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+.checkbox-label input[type="checkbox"] { accent-color: var(--accent); }
+
+/* ===== 角色列表（复用V2） ===== */
+.character-form.hidden { display: none; }
+
+.character-list { display: flex; flex-direction: column; gap: 8px; }
+
+.character-card {
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+.character-info { flex: 1; min-width: 0; }
+.character-name { font-weight: 600; font-size: 0.9rem; }
+.character-desc { color: var(--text-secondary); font-size: 0.8rem; margin-top: 4px; line-height: 1.4; }
+.character-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+/* ===== 场景列表 ===== */
+.scene-list { display: flex; flex-direction: column; gap: 8px; }
+
+.scene-card {
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    padding: 10px 12px;
+    position: relative;
+}
+.scene-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.scene-order {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--accent-alt);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.scene-title-text { font-weight: 600; font-size: 0.9rem; }
+.scene-summary { color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 6px; line-height: 1.4; }
+.scene-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.scene-meta-item { font-size: 0.75rem; color: var(--text-muted); }
+.scene-actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 2px; }
+
+/* ===== 标签 ===== */
+.tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--bg-surface);
+    color: var(--accent);
+    margin-left: 6px;
+}
+.character-role.tag { vertical-align: middle; }
+
+/* ===== 通用按钮 ===== */
+.btn {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    transition: background-color 0.2s;
+}
+.btn-primary { background-color: var(--accent); color: #fff; }
+.btn-primary:hover { background-color: var(--accent-hover); }
+.btn-secondary { background-color: var(--border); color: var(--text-primary); }
+.btn-secondary:hover { background-color: #3a3a5a; }
+.btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.btn-icon:hover { color: var(--text-primary); background-color: var(--border); }
+.btn-delete:hover { color: var(--accent); }
+
+/* ===== 空状态 ===== */
+.empty-hint { color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 24px 0; }
 
 /* ===== 底部 ===== */
 .app-footer {
@@ -141,12 +288,7 @@ body {
     flex-shrink: 0;
 }
 
-.save-status {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
+.save-status { display: flex; align-items: center; gap: 6px; }
 .save-status::before {
     content: '';
     width: 8px;
@@ -154,11 +296,7 @@ body {
     border-radius: 50%;
     background-color: var(--success);
 }
-
-.save-status.saving::before {
-    background-color: #ff9800;
-    animation: pulse 0.8s infinite;
-}
+.save-status.saving::before { background-color: #ff9800; animation: pulse 0.8s infinite; }
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }

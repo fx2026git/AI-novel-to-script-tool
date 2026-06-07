@@ -7,13 +7,10 @@ const Storage = (() => {
     const KEYS = {
         SCREENPLAY_TITLE: 'sceneforge_title',
         SCREENPLAY_CONTENT: 'sceneforge_content',
+        CHARACTERS: 'sceneforge_characters',
+        SCENES: 'sceneforge_scenes',
     };
 
-    /**
-     * 保存数据到 localStorage
-     * @param {string} key - 存储键
-     * @param {string} value - 存储值
-     */
     function save(key, value) {
         try {
             localStorage.setItem(key, value);
@@ -24,12 +21,6 @@ const Storage = (() => {
         }
     }
 
-    /**
-     * 从 localStorage 读取数据
-     * @param {string} key - 存储键
-     * @param {string} defaultValue - 默认值
-     * @returns {string}
-     */
     function load(key, defaultValue = '') {
         try {
             const value = localStorage.getItem(key);
@@ -40,9 +31,6 @@ const Storage = (() => {
         }
     }
 
-    /**
-     * 清除所有剧本数据
-     */
     function clearAll() {
         Object.values(KEYS).forEach(key => localStorage.removeItem(key));
     }
