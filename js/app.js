@@ -1,6 +1,5 @@
 /**
  * SceneForge 主应用模块
- * 负责剧本编辑器基础功能及面板标签导航
  */
 
 const App = (() => {
@@ -14,10 +13,9 @@ const App = (() => {
         bindEvents();
         updateWordCount();
 
-        // 初始化角色模块
         Characters.init(() => { scheduleAutoSave(); });
-        // 初始化场景模块
         Scenes.init(() => { scheduleAutoSave(); });
+        Timeline.init(() => { scheduleAutoSave(); });
     }
 
     function cacheDomElements() {
@@ -39,13 +37,21 @@ const App = (() => {
         contentEditor.addEventListener('input', () => { scheduleAutoSave(); updateWordCount(); });
         window.addEventListener('beforeunload', () => { saveNow(); });
 
-        // 面板标签切换
         document.querySelectorAll('.panel-tab:not([disabled])').forEach(tab => {
             tab.addEventListener('click', () => {
                 const panelName = tab.dataset.panel;
                 switchPanel(panelName);
+                if (panelName === 'timeline') {
+                    Timeline.render();
+                }
             });
         });
+
+        // 时间线刷新按钮
+        const refreshBtn = document.getElementById('btn-refresh-timeline');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => { Timeline.render(); });
+        }
     }
 
     function switchPanel(name) {

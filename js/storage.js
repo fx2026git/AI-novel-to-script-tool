@@ -1,8 +1,6 @@
 /**
  * SceneForge 存储模块
- * 使用 localStorage 实现数据持久化
  */
-
 const Storage = (() => {
     const KEYS = {
         SCREENPLAY_TITLE: 'sceneforge_title',
@@ -10,30 +8,8 @@ const Storage = (() => {
         CHARACTERS: 'sceneforge_characters',
         SCENES: 'sceneforge_scenes',
     };
-
-    function save(key, value) {
-        try {
-            localStorage.setItem(key, value);
-            return true;
-        } catch (e) {
-            console.error('Storage save error:', e);
-            return false;
-        }
-    }
-
-    function load(key, defaultValue = '') {
-        try {
-            const value = localStorage.getItem(key);
-            return value !== null ? value : defaultValue;
-        } catch (e) {
-            console.error('Storage load error:', e);
-            return defaultValue;
-        }
-    }
-
-    function clearAll() {
-        Object.values(KEYS).forEach(key => localStorage.removeItem(key));
-    }
-
+    function save(key, value) { try { localStorage.setItem(key, value); return true; } catch (e) { console.error(e); return false; } }
+    function load(key, def = '') { try { const v = localStorage.getItem(key); return v !== null ? v : def; } catch (e) { return def; } }
+    function clearAll() { Object.values(KEYS).forEach(k => localStorage.removeItem(k)); }
     return { KEYS, save, load, clearAll };
 })();
